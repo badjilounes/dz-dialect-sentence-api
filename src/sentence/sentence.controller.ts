@@ -1,11 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { BulkCreateSentenceDto } from './dto/bulk-create-sentence.dto';
 import { CreateSentenceDto } from './dto/create-sentence.dto';
 import { SentenceResponseDto } from './dto/sentence-response.dto';
 import { Sentence } from './sentence.entity';
 import { SentenceService } from './sentence.service';
 
-@ApiTags('Post')
+@ApiTags('Sentence')
 @Controller('sentence')
 export class SentenceController {
 
@@ -19,9 +20,10 @@ export class SentenceController {
     }
 
 
-
-
-
-
-    
+    @Post('bulk')
+    @ApiCreatedResponse({ type: SentenceResponseDto, isArray: true })
+    bulkCreateSentence(@Body() body: BulkCreateSentenceDto): Promise<SentenceResponseDto[]> {
+        return this.sentenceService.bulkCreateSentence(body.sentenceList);
+    }
+  
 }

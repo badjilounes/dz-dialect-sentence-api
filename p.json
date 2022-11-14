@@ -1,0 +1,8 @@
+[{"dz":"ana","dz_ar":"ان ","fr":"je","word_propositions":{"dz":["enti","houma","ana","enta"],"fr":["tu(f.)","je","ils/elles","tu(m.)"]},"additionnal_information":{"pronouns":["1sx"],"schema":"P"}},
+{"dz":"enta","dz_ar":"انتَ ","fr":"tu(m.)","word_propositions":{"dz":["ntouma","enta","7na","enti"],"fr":["tu(f.)","vous","tu(m.)","on"]},"additionnal_information":{"pronouns":["2sm"],"schema":"P"}},
+{"dz":"enti","dz_ar":"انتِ ","fr":"tu(f.)","word_propositions":{"dz":["enti","houma","hiya","enta"],"fr":["elle","ils/elles","tu(m.)","tu(f.)"]},"additionnal_information":{"pronouns":["2sf"],"schema":"P"}},
+{"dz":"houwa","dz_ar":"هو ","fr":"il","word_propositions":{"dz":["7na","enta","houwa","ana"],"fr":["tu(m.)","il","on","je"]},"additionnal_information":{"pronouns":["3sm"],"schema":"P"}},
+{"dz":"hiya","dz_ar":"هي ","fr":"elle","word_propositions":{"dz":["7na","ntouma","ana","hiya"],"fr":["elle","vous","on","je"]},"additionnal_information":{"pronouns":["3sf"],"schema":"P"}},
+{"dz":"7na","dz_ar":"حن ","fr":"on","word_propositions":{"dz":["ana","7na","hiya","enta"],"fr":["tu(m.)","on","je","elle"]},"additionnal_information":{"pronouns":["1px"],"schema":"P"}},
+{"dz":"ntouma","dz_ar":"أنتما ","fr":"vous","word_propositions":{"dz":["ntouma","ana","enta","hiya"],"fr":["tu(m.)","je","vous","elle"]},"additionnal_information":{"pronouns":["2px"],"schema":"P"}},
+{"dz":"houma","dz_ar":"هُمَا ","fr":"ils/elles","word_propositions":{"dz":["enti","ana","ntouma","houma"],"fr":["tu(f.)","ils/elles","je","vous"]},"additionnal_information":{"pronouns":["3px"],"schema":"P"}}]

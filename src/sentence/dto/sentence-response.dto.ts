@@ -27,4 +27,7 @@ export class SentenceResponseDto {
 
     @ApiProperty()
     tense: string;
+
+    @ApiProperty()
+    schema: string;
 }

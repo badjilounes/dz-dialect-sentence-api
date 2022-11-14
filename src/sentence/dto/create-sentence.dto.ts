@@ -27,4 +27,7 @@ export class CreateSentenceDto {
 
     @ApiProperty()
     tense: string;
+
+    @ApiProperty()
+    schema: string;
 }
