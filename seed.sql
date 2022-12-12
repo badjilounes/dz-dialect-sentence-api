@@ -644,11 +644,3 @@ INSERT INTO public.sentence ("dz", "dz_ar", "word_propositions_dz", "word_propos
 INSERT INTO public.sentence ("dz", "dz_ar", "word_propositions_dz", "word_propositions_fr", "pronouns", "adjectives", "verbs", "tense", "fr", "id", "schema") VALUES ('rana', 'رانا ', '{rak,rana,rakoum,rahi}', '{tu(m.),êtes,on,es,est,elle,vous}', '{1px}', '{}', '{être}', 'present', 'on est', '54fdb161-7078-4277-9a53-24bd88cf3baf', 'PV');
 INSERT INTO public.sentence ("dz", "dz_ar", "word_propositions_dz", "word_propositions_fr", "pronouns", "adjectives", "verbs", "tense", "fr", "id", "schema") VALUES ('rakoum', 'راكم ', '{rak,rakoum,rani,rahou}', '{êtes,je,suis,est,tu(m.),es,vous,il}', '{2px}', '{}', '{être}', 'present', 'vous êtes', '9394f749-c4b7-4a9c-8807-c537df1e5409', 'PV');
 INSERT INTO public.sentence ("dz", "dz_ar", "word_propositions_dz", "word_propositions_fr", "pronouns", "adjectives", "verbs", "tense", "fr", "id", "schema") VALUES ('rahoum', 'راهوم ', '{rahoum,raki,rani,rakoum}', '{vous,suis,tu(f.),êtes,sont,je,es,ils/elles}', '{3px}', '{}', '{être}', 'present', 'ils/elles sont', 'f2359a57-1380-4535-b81d-ea95e8c37493', 'PV');
-
-
--- Completed on 2022-11-14 15:43:44
-
---
--- PostgreSQL database dump complete
---
-

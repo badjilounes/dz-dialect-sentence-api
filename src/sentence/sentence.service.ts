@@ -1,44 +1,63 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { BulkSentenceDto } from './dto/bulk-create-sentence.dto';
 import { CreateSentenceDto } from './dto/create-sentence.dto';
+import { SentenceResponseDto } from './dto/sentence-response.dto';
 import { Sentence } from './sentence.entity';
 
 @Injectable()
 export class SentenceService {
+  constructor(
+    @InjectRepository(Sentence)
+    private sentenceRepository: Repository<Sentence>,
+  ) {}
 
-    constructor(@InjectRepository(Sentence) private sentenceRepository: Repository<Sentence>) {}
+  async createSentence(
+    _createSentenceDto: CreateSentenceDto,
+  ): Promise<Sentence> {
+    const sentence: Sentence =
+      this.sentenceRepository.create(_createSentenceDto);
+    return this.sentenceRepository.save(sentence);
+  }
 
-    
-    async createSentence(_createSentenceDto: CreateSentenceDto): Promise<Sentence> {
-        const sentence: Sentence = this.sentenceRepository.create(_createSentenceDto);
-        return this.sentenceRepository.save(sentence);
+  async bulkCreateSentence(
+    sentenceList: BulkSentenceDto[],
+  ): Promise<Sentence[]> {
+    const createdSentenceList: Sentence[] = [];
+
+    for (const sentence of sentenceList) {
+      const createSentenceDto: CreateSentenceDto = {
+        dz: sentence.dz,
+        dz_ar: sentence.dz_ar,
+        fr: sentence.fr,
+        word_propositions_dz: sentence.word_propositions.dz,
+        word_propositions_fr: sentence.word_propositions.fr,
+        pronouns: sentence.additionnal_information.pronouns || [],
+        adjectives: sentence.additionnal_information.adjectives || [],
+        verbs: sentence.additionnal_information.verbs || [],
+        tense: sentence.additionnal_information.tense || '',
+        schema: sentence.additionnal_information.schema || '',
+      };
+      // eslint-disable-next-line no-await-in-loop
+      const createdSentence: Sentence = await this.createSentence(
+        createSentenceDto,
+      );
+      createdSentenceList.push(createdSentence);
     }
 
-    async bulkCreateSentence(sentenceList: BulkSentenceDto[]): Promise<Sentence[]> {
-        const createdSentenceList: Sentence[] = [];
+    return createdSentenceList;
 
-        for (let sentence of sentenceList) {
-            const createSentenceDto: CreateSentenceDto = {
-                dz: sentence.dz,
-                dz_ar: sentence.dz_ar,
-                fr: sentence.fr,
-                word_propositions_dz: sentence.word_propositions.dz,
-                word_propositions_fr: sentence.word_propositions.fr,
-                pronouns: sentence.additionnal_information.pronouns || [],
-                adjectives: sentence.additionnal_information.adjectives|| [],
-                verbs: sentence.additionnal_information.verbs|| [],
-                tense: sentence.additionnal_information.tense || '',
-                schema: sentence.additionnal_information.schema || '',
-            }
-            const createdSentence: Sentence = await this.createSentence(createSentenceDto);
-            createdSentenceList.push(createdSentence);
-        }
+    // return Promise.all(sentenceList.map((sentence) => this.createSentence(sentence)))
+  }
 
-        return createdSentenceList;
-
-        // return Promise.all(sentenceList.map((sentence) => this.createSentence(sentence)))
-    }
+  getSentenceList(count: number): Promise<SentenceResponseDto[]> {
+    return this.sentenceRepository
+      .createQueryBuilder('sentence')
+      .where('sentence.schema != :schema', { schema: 'number' })
+      .orderBy('RANDOM()')
+      .limit(count)
+      .getMany();
+  }
 }
-
