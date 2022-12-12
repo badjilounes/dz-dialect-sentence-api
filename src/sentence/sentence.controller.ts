@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  ParseArrayPipe,
   ParseIntPipe,
   Post,
   Query,
@@ -10,6 +11,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -28,12 +30,41 @@ export class SentenceController {
     operationId: 'getSentenceList',
     summary: 'Get a list of sentence',
   })
+  @ApiQuery({ name: 'count', required: true, type: Number })
+  @ApiQuery({ name: 'verbs', required: false, type: String, isArray: true })
+  @ApiQuery({ name: 'tenses', required: false, type: String, isArray: true })
   @ApiBadRequestResponse()
   @ApiCreatedResponse({ type: SentenceResponseDto, isArray: true })
   getSentenceList(
     @Query('count', ParseIntPipe) count: number,
+    @Query('verbs', new ParseArrayPipe({ separator: ',', optional: true }))
+    verbs?: string[],
+    @Query('tenses', new ParseArrayPipe({ separator: ',', optional: true }))
+    tenses?: string[],
   ): Promise<SentenceResponseDto[]> {
-    return this.sentenceService.getSentenceList(count);
+    return this.sentenceService.getSentenceList(count, verbs, tenses);
+  }
+
+  @Get('verb-list')
+  @ApiOperation({
+    operationId: 'getVerbList',
+    summary: 'Get a list of verbs',
+  })
+  @ApiBadRequestResponse()
+  @ApiCreatedResponse({ type: String, isArray: true })
+  getVerbList(): Promise<string[]> {
+    return this.sentenceService.getVerbList();
+  }
+
+  @Get('tense-list')
+  @ApiOperation({
+    operationId: 'getTenseList',
+    summary: 'Get a list of tenses',
+  })
+  @ApiBadRequestResponse()
+  @ApiCreatedResponse({ type: String, isArray: true })
+  getTenseList(): Promise<string[]> {
+    return this.sentenceService.getTenseList();
   }
 
   @Post()

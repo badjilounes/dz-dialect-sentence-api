@@ -12,6 +12,7 @@ import { SentenceModule } from './sentence/sentence.module';
       autoLoadEntities: true,
       synchronize: true,
       url: process.env.DATABASE_URL,
+      logging: 'all',
     }),
     SentenceModule,
   ],

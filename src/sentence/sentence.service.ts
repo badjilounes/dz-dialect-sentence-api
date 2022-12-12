@@ -52,12 +52,41 @@ export class SentenceService {
     // return Promise.all(sentenceList.map((sentence) => this.createSentence(sentence)))
   }
 
-  getSentenceList(count: number): Promise<SentenceResponseDto[]> {
-    return this.sentenceRepository
+  getSentenceList(
+    count: number,
+    verbs: string[] = [],
+    tenses: string[] = [],
+  ): Promise<SentenceResponseDto[]> {
+    const builder = this.sentenceRepository
       .createQueryBuilder('sentence')
-      .where('sentence.schema != :schema', { schema: 'number' })
-      .orderBy('RANDOM()')
-      .limit(count)
-      .getMany();
+      .where('sentence.schema != :schema', { schema: 'number' });
+
+    if (verbs.length > 0) {
+      builder.andWhere('sentence.verbs @> :verbs', { verbs });
+    }
+
+    if (tenses.length > 0) {
+      builder.andWhere('sentence.tense = ANY(:tenses)', { tenses });
+    }
+
+    return builder.orderBy('RANDOM()').limit(count).getMany();
+  }
+
+  async getTenseList(): Promise<string[]> {
+    const sentences = await this.sentenceRepository.query(
+      'SELECT DISTINCT tense FROM sentence',
+    );
+
+    return sentences
+      .filter((sentence: Sentence) => sentence.tense !== '')
+      .map((sentence: Sentence) => sentence.tense);
+  }
+
+  async getVerbList(): Promise<string[]> {
+    const sentences = await this.sentenceRepository.query(
+      'SELECT DISTINCT unnest(verbs) FROM sentence',
+    );
+
+    return sentences.map((result) => result.unnest);
   }
 }
