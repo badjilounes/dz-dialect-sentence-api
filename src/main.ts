@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,7 +10,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
-  app.enableCors({ origin: app.get(ConfigService).get('CORS_ORIGIN') });
+  app.enableCors({ origin: buildCorsOrigin(app) });
 
   const config = new DocumentBuilder()
     .setTitle('dz dialect sentence API')
@@ -22,4 +22,13 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT || 3000);
 }
+
+function buildCorsOrigin(app: INestApplication): string[] {
+  try {
+    return JSON.parse(app.get(ConfigService).get('CORS_ORIGIN'));
+  } catch {
+    return [app.get(ConfigService).get('CORS_ORIGIN')];
+  }
+}
+
 bootstrap();
