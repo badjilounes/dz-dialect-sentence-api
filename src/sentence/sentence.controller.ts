@@ -20,6 +20,8 @@ import { CreateSentenceDto } from './dto/create-sentence.dto';
 import { SentenceResponseDto } from './dto/sentence-response.dto';
 import { SentenceService } from './sentence.service';
 
+import { PaginatedSentenceResponseDto } from 'src/sentence/dto/paginated-sentence-response-dto';
+
 @ApiTags('Sentence')
 @Controller('sentence')
 export class SentenceController {
@@ -31,6 +33,7 @@ export class SentenceController {
     summary: 'Get a list of sentence',
   })
   @ApiQuery({ name: 'count', required: true, type: Number })
+  @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'verbs', required: false, type: String, isArray: true })
   @ApiQuery({ name: 'tenses', required: false, type: String, isArray: true })
   @ApiBadRequestResponse()
@@ -43,6 +46,24 @@ export class SentenceController {
     tenses?: string[],
   ): Promise<SentenceResponseDto[]> {
     return this.sentenceService.getSentenceList(count, verbs, tenses);
+  }
+
+  @Get('search')
+  @ApiOperation({
+    operationId: 'searchSentence',
+    summary: 'Search a sentence',
+  })
+  @ApiQuery({ name: 'pageIndex', required: true, type: Number })
+  @ApiQuery({ name: 'pageSize', required: true, type: Number })
+  @ApiQuery({ name: 'q', required: false, type: String })
+  @ApiBadRequestResponse()
+  @ApiCreatedResponse({ type: PaginatedSentenceResponseDto })
+  search(
+    @Query('pageIndex', ParseIntPipe) pageIndex: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+    @Query('q') query = '',
+  ): Promise<PaginatedSentenceResponseDto> {
+    return this.sentenceService.search(pageIndex, pageSize, query);
   }
 
   @Get('verb-list')

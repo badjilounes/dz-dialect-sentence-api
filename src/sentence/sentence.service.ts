@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, ILike, Repository } from 'typeorm';
 
 import { BulkSentenceDto } from './dto/bulk-create-sentence.dto';
 import { CreateSentenceDto } from './dto/create-sentence.dto';
 import { SentenceResponseDto } from './dto/sentence-response.dto';
 import { Sentence } from './sentence.entity';
+
+import { PaginatedSentenceResponseDto } from 'src/sentence/dto/paginated-sentence-response-dto';
 
 @Injectable()
 export class SentenceService {
@@ -25,31 +27,52 @@ export class SentenceService {
   async bulkCreateSentence(
     sentenceList: BulkSentenceDto[],
   ): Promise<Sentence[]> {
-    const createdSentenceList: Sentence[] = [];
+    return Promise.all(
+      sentenceList.map((sentence) =>
+        this.createSentence({
+          dz: sentence.dz,
+          dz_ar: sentence.dz_ar,
+          fr: sentence.fr,
+          word_propositions_dz: sentence.word_propositions.dz,
+          word_propositions_fr: sentence.word_propositions.fr,
+          pronouns: sentence.additionnal_information.pronouns || [],
+          adjectives: sentence.additionnal_information.adjectives || [],
+          verbs: sentence.additionnal_information.verbs || [],
+          tense: sentence.additionnal_information.tense || '',
+          schema: sentence.additionnal_information.schema || '',
+        }),
+      ),
+    );
+  }
 
-    for (const sentence of sentenceList) {
-      const createSentenceDto: CreateSentenceDto = {
-        dz: sentence.dz,
-        dz_ar: sentence.dz_ar,
-        fr: sentence.fr,
-        word_propositions_dz: sentence.word_propositions.dz,
-        word_propositions_fr: sentence.word_propositions.fr,
-        pronouns: sentence.additionnal_information.pronouns || [],
-        adjectives: sentence.additionnal_information.adjectives || [],
-        verbs: sentence.additionnal_information.verbs || [],
-        tense: sentence.additionnal_information.tense || '',
-        schema: sentence.additionnal_information.schema || '',
-      };
-      // eslint-disable-next-line no-await-in-loop
-      const createdSentence: Sentence = await this.createSentence(
-        createSentenceDto,
-      );
-      createdSentenceList.push(createdSentence);
+  async search(
+    pageIndex: number,
+    pageSize: number,
+    query: string,
+  ): Promise<PaginatedSentenceResponseDto> {
+    const options: FindManyOptions<Sentence> = {
+      skip: pageIndex * pageSize,
+      take: pageSize,
+    };
+
+    if (query) {
+      options.where = [
+        { dz: ILike(query) },
+        { dz_ar: ILike(query) },
+        { fr: ILike(query) },
+      ];
     }
 
-    return createdSentenceList;
+    const [elements, length] = await this.sentenceRepository.findAndCount(
+      options,
+    );
 
-    // return Promise.all(sentenceList.map((sentence) => this.createSentence(sentence)))
+    return {
+      elements,
+      length,
+      pageIndex,
+      pageSize,
+    };
   }
 
   getSentenceList(
