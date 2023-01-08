@@ -57,9 +57,9 @@ export class SentenceService {
 
     if (query) {
       options.where = [
-        { dz: ILike(query) },
-        { dz_ar: ILike(query) },
-        { fr: ILike(query) },
+        { dz: ILike(`%${query}%`) },
+        { dz_ar: ILike(`%${query}%`) },
+        { fr: ILike(`%${query}%`) },
       ];
     }
 
