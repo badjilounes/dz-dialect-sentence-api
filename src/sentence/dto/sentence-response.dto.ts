@@ -1,33 +1,36 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class SentenceResponseDto {
-    @ApiProperty()
-    dz: string;
+  @ApiProperty()
+  id: string;
 
-    @ApiProperty()
-    dz_ar: string;
+  @ApiProperty()
+  dz: string;
 
-    @ApiProperty()
-    fr: string;
+  @ApiProperty()
+  dz_ar: string;
 
-    @ApiProperty()
-    word_propositions_dz: string[];
+  @ApiProperty()
+  fr: string;
 
-    @ApiProperty()
-    word_propositions_fr: string[];
+  @ApiProperty()
+  word_propositions_dz: string[];
 
-    @ApiProperty()
-    pronouns: string[];
+  @ApiProperty()
+  word_propositions_fr: string[];
 
-    @ApiProperty()
-    adjectives: string[];
+  @ApiProperty()
+  pronouns: string[];
 
-    @ApiProperty()
-    verbs: string[];
+  @ApiProperty()
+  adjectives: string[];
 
-    @ApiProperty()
-    tense: string;
+  @ApiProperty()
+  verbs: string[];
 
-    @ApiProperty()
-    schema: string;
+  @ApiProperty()
+  tense: string;
+
+  @ApiProperty()
+  schema: string;
 }

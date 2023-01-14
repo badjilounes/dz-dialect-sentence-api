@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   ParseArrayPipe,
   ParseIntPipe,
   Post,
@@ -10,6 +12,8 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiQuery,
   ApiTags,
@@ -108,5 +112,14 @@ export class SentenceController {
     @Body() body: BulkCreateSentenceDto,
   ): Promise<SentenceResponseDto[]> {
     return this.sentenceService.bulkCreateSentence(body.sentenceList);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ operationId: 'deleteSentence', summary: 'Delete a sentence' })
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  deleteSentence(@Param('id') id: string): Promise<void> {
+    return this.sentenceService.deleteSentenceById(id);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
 
@@ -22,6 +22,15 @@ export class SentenceService {
     const sentence: Sentence =
       this.sentenceRepository.create(_createSentenceDto);
     return this.sentenceRepository.save(sentence);
+  }
+
+  async deleteSentenceById(id: string): Promise<void> {
+    const sentence = this.sentenceRepository.findOne({ where: { id } });
+    if (!sentence) {
+      throw new NotFoundException('Sentence not found');
+    }
+
+    await this.sentenceRepository.delete(id);
   }
 
   async bulkCreateSentence(
