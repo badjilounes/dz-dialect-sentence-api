@@ -33,6 +33,14 @@ export class SentenceService {
     await this.sentenceRepository.delete(id);
   }
 
+  async editSentenceById(id: string, edited: CreateSentenceDto): Promise<void> {
+    const sentence = await this.sentenceRepository.findOne({ where: { id } });
+    if (!sentence) {
+      throw new NotFoundException('Sentence not found');
+    }
+    await this.sentenceRepository.update(id, edited);
+  }
+
   async bulkCreateSentence(
     sentenceList: BulkSentenceDto[],
   ): Promise<Sentence[]> {

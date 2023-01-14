@@ -102,6 +102,17 @@ export class SentenceController {
     return this.sentenceService.createSentence(body);
   }
 
+  @Post(':id')
+  @ApiOperation({ operationId: 'editSentence', summary: 'Edit a sentence' })
+  @ApiBadRequestResponse()
+  @ApiOkResponse()
+  editSentence(
+    @Param('id') id: string,
+    @Body() body: CreateSentenceDto,
+  ): Promise<void> {
+    return this.sentenceService.editSentenceById(id, body);
+  }
+
   @Post('bulk')
   @ApiOperation({
     operationId: 'bulkCreateSentence',
