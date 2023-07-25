@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
+@Index(['dz', 'dz_ar', 'fr'], { unique: true })
 @Entity()
 export class Sentence {
   @PrimaryGeneratedColumn('uuid')
